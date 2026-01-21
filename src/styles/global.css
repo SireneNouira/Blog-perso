@@ -892,7 +892,6 @@ img {
 	position: relative;
 	overflow: hidden;
 	background: #f6f8ff;
-	aspect-ratio: 4 / 3;
 	max-height: 130px;
 }
 
