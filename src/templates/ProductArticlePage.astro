@@ -1,0 +1,371 @@
+---
+import Layout from '../layouts/Layout.astro';
+import AffiliateButton from '../components/AffiliateButton.astro';
+import AffiliateBox from '../components/AffiliateBox.astro';
+import ProsConsBox from '../components/ProsConsBox.astro';
+import ProductSpecs from '../components/ProductSpecs.astro';
+import StarRating from '../components/StarRating.astro';
+import Icon from '../components/Icon.astro';
+import type { ProductPageData } from '../data/products/types';
+import '../styles/stylearticle.css';
+
+interface Props {
+  data: ProductPageData;
+}
+
+const { data } = Astro.props;
+const base = import.meta.env.BASE_URL;
+
+const resolveImage = (path: string) => (path?.startsWith('http') ? path : base + path);
+const mainImage = resolveImage(data.images.main);
+const galleryImages = data.images.gallery.map(resolveImage);
+
+const legalTransparencyHtml = data.legalNotice.transparency.replace(
+  'href="divulgation-affiliation"',
+  `href="${base}divulgation-affiliation"`
+);
+---
+
+<Layout 
+  title={data.metaTitle} 
+  description={data.metaDescription}
+  image={mainImage}
+>
+  <article class="product-article">
+    <!-- En-tête de l'article -->
+    <div class="article-header container">
+      <div class="breadcrumb">
+        <a href={base}>Accueil</a> » 
+        <a href={base + 'articles'}>Articles</a> » 
+        <a href={`${base}categories/${data.category.toLowerCase()}`}>{data.category}</a> »
+        <span>{data.name}</span>
+      </div>
+      
+      <!-- H1 Unique - Crucial pour le SEO -->
+      <h1 class="article-title">
+        <Icon name="award" size={24} /> {data.name} : Test & Avis Complet - L'Aspirateur Balai Premium avec Auto-Vidage
+      </h1>
+      
+      <div class="article-meta">
+        <time datetime={data.dates.publish}>Publié le {data.dates.publish}</time>
+        <span class="separator">•</span>
+        <time datetime={data.dates.update}>Mis à jour le {data.dates.update}</time>
+        <span class="separator">•</span>
+        <span>Temps de lecture : {data.dates.readTime}</span>
+      </div>
+      
+      <!-- Note et CTA principal -->
+      <div class="product-summary">
+        <div class="product-summary-left">
+          <img 
+            src={mainImage} 
+            alt={`${data.name} - Aspirateur balai premium avec station auto-vide`}
+            class="product-main-image"
+          />
+        </div>
+        
+        <div class="product-summary-right">
+          <div class="rating-box">
+            <StarRating rating={data.rating} size="medium" />
+            <span class="rating-text">{data.rating}/5 - Excellent</span>
+          </div>
+          
+          <div class="price-box">
+            {data.originalPrice && (
+              <span class="original-price">{data.originalPrice}</span>
+            )}
+            <span class="current-price">{data.price}</span>
+          </div>
+          
+          <!-- CTA PRINCIPAL EN HAUT -->
+          <div class="cta-primary">
+            <AffiliateButton 
+              href={data.affiliateLink}
+              text="Voir l'Offre sur Amazon"
+              icon="shopping-cart"
+              variant="primary"
+              size="large"
+              track="hero-cta"
+            />
+            <p class="cta-subtext">✓ Livraison Rapide ✓ Retours Gratuits ✓ Prime Éligible</p>
+          </div>
+          
+          <p class="highlight-text">
+            <Icon name="check-circle" size={20} class="icon-success" />
+            <span set:html={data.highlight} />
+          </p>
+
+          <div class="hero-facts">
+            {data.heroFacts.map((fact) => (
+              <div class="fact-chip">
+                <Icon name={fact.icon} size={18} class="icon-success" />
+                <div class="fact-copy">
+                  <span class="fact-label">{fact.label}</span>
+                  <strong class="fact-value">{fact.value}</strong>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AFFILIATION BOX -->
+    <div class="container">
+      <AffiliateBox 
+        title={data.affiliateBox.title}
+        productName={data.name}
+        price={data.price}
+        image={mainImage}
+        affiliateLink={data.affiliateLink}
+        badge={data.affiliateBox.badge}
+        features={data.affiliateBox.features}
+      />
+    </div>
+
+    <!-- Contenu principal -->
+    <div class="article-content container">
+      
+      <!-- Introduction -->
+      <section class="content-section intro">
+        <h2><Icon name="info" size={20} /> Présentation du {data.name}</h2>
+        <p class="lead" set:html={data.content.intro[0]} />
+        <p set:html={data.content.intro[1]} />
+        <p set:html={data.content.intro[2]} />
+      </section>
+
+      <!-- Points Forts / Faibles -->
+      <section class="content-section">
+        <h2><Icon name="thumbs-up" size={20} /> Avantages et Inconvénients</h2>
+        <ProsConsBox pros={data.pros} cons={data.cons} />
+      </section>
+
+      <!-- Technologies & Fonctionnalités -->
+      <section class="content-section">
+        <h2><Icon name="cpu" size={20} /> Technologies & Fonctionnalités Clés</h2>
+        
+        <div class="feature-grid">
+          {data.content.featureCards.map((feature) => (
+            <div class="feature-card">
+              <div class="feature-icon">{feature.icon}</div>
+              <h3>{feature.title}</h3>
+              <p set:html={feature.description} />
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- CTA Milieu d'article -->
+      <div class="cta-box cta-mid-article">
+        <h3>{data.content.ctaMid.title}</h3>
+        <p>{data.content.ctaMid.text}</p>
+        <AffiliateButton 
+          href={data.affiliateLink}
+          text={data.content.ctaMid.buttonText}
+          variant="accent"
+          size="large"
+          track="mid-article-cta"
+        />
+      </div>
+
+      <!-- Caractéristiques Techniques -->
+      <section class="content-section">
+        <h2><Icon name="bar-chart" size={20} /> Caractéristiques Techniques Détaillées</h2>
+        <ProductSpecs specs={data.specs} />
+      </section>
+
+      <!-- Performance Détaillée -->
+      <section class="content-section">
+        <h2><Icon name="target" size={20} /> Performance & Utilisation Réelle</h2>
+        
+        <h3>Aspiration et Efficacité</h3>
+        {data.content.performance.aspiration.map((paragraph) => (
+          <p set:html={paragraph} />
+        ))}
+
+        <h3>Autonomie Réelle</h3>
+        <p set:html={data.content.performance.autonomyIntro} />
+        <ul>
+          {data.content.performance.autonomyRanges.map((range) => (
+            <li><strong>{range.label} :</strong> {range.value}</li>
+          ))}
+        </ul>
+        <p>{data.content.performance.autonomyConclusion}</p>
+
+        <h3>Gestion des Poils d'Animaux</h3>
+        {data.content.performance.hair.map((paragraph) => (
+          <p set:html={paragraph} />
+        ))}
+
+        <h3>Niveau Sonore</h3>
+        {data.content.performance.noise.map((paragraph) => (
+          <p set:html={paragraph} />
+        ))}
+      </section>
+
+      <!-- Station Auto-Vide -->
+      <section class="content-section highlight-section">
+        <h2><Icon name="award" size={20} /> Station Auto-Vide : Le Vrai Plus du Modèle</h2>
+        {data.content.station.paragraphs.map((paragraph) => (
+          <p set:html={paragraph} />
+        ))}
+        <ol>
+          {data.content.station.steps.map((step) => (
+            <li set:html={step} />
+          ))}
+        </ol>
+        <p><strong>Avantages concrets :</strong></p>
+        <ul>
+          {data.content.station.benefits.map((benefit) => (
+            <li>{benefit}</li>
+          ))}
+        </ul>
+        <p set:html={data.content.station.note} />
+      </section>
+
+      <!-- Avis Clients -->
+      <section class="content-section">
+        <h2><Icon name="star" size={20} /> Avis Clients & Retours d'Expérience</h2>
+        <div class="reviews-summary">
+          {data.content.reviews.stats.map((stat) => (
+            <div class="review-stat">
+              <span class="stat-value">{stat.value}</span>
+              <span class="stat-label">{stat.label}</span>
+            </div>
+          ))}
+        </div>
+
+        <h3>Ce que les utilisateurs apprécient :</h3>
+        <ul class="review-list positive">
+          {data.content.reviews.positives.map((item) => (
+            <li><Icon name="check-circle" size={16} class="icon-success" /> <span set:html={item} /></li>
+          ))}
+        </ul>
+
+        <h3>Quelques critiques constructives :</h3>
+        <ul class="review-list negative">
+          {data.content.reviews.negatives.map((item) => (
+            <li><Icon name="alert-circle" size={16} class="icon-warning" /> {item}</li>
+          ))}
+        </ul>
+
+        <p class="review-conclusion" set:html={data.content.reviews.conclusion} />
+      </section>
+
+      <!-- Pour Qui ? -->
+      <section class="content-section">
+        <h2><Icon name="users" size={20} /> Pour Qui Est Ce Modèle ?</h2>
+        
+        <div class="target-audience">
+          <div class="audience-card recommended">
+            <h3><Icon name="check-circle" size={18} /> Parfait Si Vous Êtes :</h3>
+            <ul>
+              {data.content.targetAudience.recommended.map((item) => (
+                <li set:html={item} />
+              ))}
+            </ul>
+          </div>
+
+          <div class="audience-card not-recommended">
+            <h3><Icon name="x-circle" size={18} /> À Éviter Si :</h3>
+            <ul>
+              {data.content.targetAudience.notRecommended.map((item) => (
+                <li set:html={item} />
+              ))}
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- Galerie d'Images (placeholders) -->
+      <section class="content-section">
+        <h2><Icon name="camera" size={20} /> Galerie Photos</h2>
+        <div class="product-gallery">
+          {galleryImages.map((image, index) => (
+            <div class="gallery-item">
+              <img 
+                src={image} 
+                alt={`${data.name} - Photo ${index + 1}`}
+                loading="lazy"
+              />
+            </div>
+          ))}
+        </div>
+        <p class="image-note" set:html={data.content.galleryNote} />
+      </section>
+
+      <!-- CTA Avant FAQ -->
+      <div class="cta-box cta-pre-faq">
+        <h3>{data.content.ctaPreFaq.title}</h3>
+        <p>{data.content.ctaPreFaq.text}</p>
+        <AffiliateButton 
+          href={data.affiliateLink}
+          text={data.content.ctaPreFaq.buttonText}
+          variant="primary"
+          size="large"
+          track="pre-faq-cta"
+        />
+        <p class="cta-subtext">{data.content.ctaPreFaq.subtext}</p>
+      </div>
+
+      <!-- FAQ -->
+      <section class="content-section faq-section">
+        <h2><Icon name="help-circle" size={20} /> Questions Fréquentes (FAQ)</h2>
+        
+        {data.content.faq.map((faq) => (
+          <div class="faq-item">
+            <h3>{faq.question}</h3>
+            <p set:html={faq.answer} />
+          </div>
+        ))}
+      </section>
+
+      <!-- Conclusion -->
+      <section class="content-section conclusion">
+        <h2><Icon name="target" size={20} /> Notre Verdict Final</h2>
+        <div class="verdict-box">
+          <div class="verdict-rating">
+            <StarRating rating={data.rating} size="large" />
+            <span class="verdict-score">{data.rating}/5</span>
+          </div>
+          {data.content.verdict.paragraphs.map((paragraph) => (
+            <p class="verdict-text" set:html={paragraph} />
+          ))}
+          <p class="verdict-recommend">
+            <Icon name="check-circle" size={24} class="icon-success" />
+            <span set:html={data.content.verdict.recommendation} />
+          </p>
+        </div>
+      </section>
+
+      <!-- CTA Final -->
+      <div class="cta-box cta-final">
+        <h3>{data.content.ctaFinal.title}</h3>
+        <p set:html={data.content.ctaFinal.text} />
+        <AffiliateButton 
+          href={data.affiliateLink}
+          text={data.content.ctaFinal.buttonText}
+          variant="primary"
+          size="large"
+          track="final-cta"
+        />
+        <p class="cta-subtext">
+          {data.content.ctaFinal.subtext.map((item, idx) => (
+            <>
+              {item}
+              {idx < data.content.ctaFinal.subtext.length - 1 && <br />}
+            </>
+          ))}
+        </p>
+      </div>
+
+      <!-- Informations légales -->
+      <div class="legal-notice">
+        <p set:html={legalTransparencyHtml} />
+        <p set:html={data.legalNotice.update} />
+      </div>
+
+    </div>
+  </article>
+</Layout>
+

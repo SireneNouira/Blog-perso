@@ -1,15 +1,42 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import AffiliateButton from "../components/AffiliateButton.astro";
 import Icon from "../components/Icon.astro";
+import products from "../data/products";
 
 const base = import.meta.env.BASE_URL;
 
-const lastUpdate = "19 janvier 2026";
+const resolveImage = (path: string) => (path?.startsWith("http") ? path : base + path);
 
-const categories = [];
+const categoryIcons: Record<string, string> = {
+  Aspirateurs: "device-vacuum"
+};
 
-const articles = [];
+const categories = Object.values(
+  products.reduce((acc, product) => {
+    const key = product.category;
+    if (!acc[key]) {
+      acc[key] = {
+        name: product.category,
+        slug: product.category.toLowerCase(),
+        icon: categoryIcons[product.category] ?? "folder",
+        count: 0
+      };
+    }
+    acc[key].count += 1;
+    return acc;
+  }, {} as Record<string, { name: string; slug: string; icon: string; count: number }>)
+);
+
+const articles = products.map(product => ({
+  title: `${product.name} - Test & Avis Complet`,
+  slug: product.slug,
+  category: product.category,
+  excerpt: product.metaDescription,
+  image: resolveImage(product.images.main),
+  rating: product.rating,
+  publishDate: product.dates.publish,
+  readTime: product.dates.readTime
+}));
 ---
 
 <Layout
@@ -22,17 +49,41 @@ const articles = [];
     <section class="featured-section">
       <div class="section-header">
         <div>
-          <p class="section-kicker">Contenu à venir</p>
+          <p class="section-kicker">Dernières publications</p>
           <h2 class="section-title">
-            <Icon name="star" class="icon-accent" /> Articles en cours de création
+            <Icon name="star" class="icon-accent" /> Articles récents
           </h2>
-          <p class="section-subtitle">De nombreux tests et comparatifs sont en cours de rédaction. Revenez bientôt pour découvrir nos premiers contenus !</p>
+          <p class="section-subtitle">Découvrez nos derniers tests et avis produits.</p>
         </div>
       </div>
 
-      <div style="text-align: center; padding: 4rem 2rem; background: var(--color-surface); border-radius: 12px; margin-top: 2rem;">
-        <Icon name="clock" class="icon-accent" size={48} />
-        <p style="margin-top: 1rem; font-size: 1.125rem; color: var(--color-text-secondary);">Nos équipes travaillent actuellement sur de nouveaux articles de qualité.</p>
+      <div class="articles-grid">
+        {articles.map(article => (
+          <article class="article-card">
+            <a href={base + article.slug} class="article-link">
+              <div class="article-image">
+                <img src={article.image} alt={article.title} />
+                <span class="article-category">{article.category}</span>
+              </div>
+              <div class="article-content">
+                <div class="article-rating">
+                  <Icon name="star" class="icon-accent" size={16} />
+                  <span>{article.rating}/5</span>
+                </div>
+                <h3 class="article-title">{article.title}</h3>
+                <p class="article-excerpt">{article.excerpt}</p>
+                <div class="article-meta">
+                  <time datetime={article.publishDate}>{article.publishDate}</time>
+                  <span class="separator">•</span>
+                  <span>{article.readTime} de lecture</span>
+                </div>
+                <div class="article-cta">
+                  <span class="read-more">Lire l'article complet <Icon name="arrow-right" size={16} /></span>
+                </div>
+              </div>
+            </a>
+          </article>
+        ))}
       </div>
     </section>
 
@@ -42,8 +93,20 @@ const articles = [];
           <div>
             <p class="section-kicker">Catégories</p>
             <h2 class="section-title"><Icon name="folders" class="icon-accent" /> Parcourir par thème</h2>
-            <p class="section-subtitle">Les catégories seront disponibles dès la publication des premiers articles.</p>
+            <p class="section-subtitle">Trouvez rapidement ce que vous cherchez.</p>
           </div>
+        </div>
+        
+        <div class="categories-grid">
+          {categories.map(category => (
+            <a href={base + `categories/${category.slug}`} class="category-card">
+              <div class="category-icon">
+                <Icon name={category.icon} size={32} class="icon-accent" />
+              </div>
+              <h3 class="category-name">{category.name}</h3>
+              <span class="category-count">{category.count} article{category.count > 1 ? 's' : ''}</span>
+            </a>
+          ))}
         </div>
       </div>
     </section>

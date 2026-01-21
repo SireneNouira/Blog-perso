@@ -5,9 +5,28 @@ import Icon from '../components/Icon.astro';
 
 const base = import.meta.env.BASE_URL;
 
-const featuredArticles = [];
+const featuredArticles = [
+  {
+    id: 1,
+    title: "Shark PowerDetect Clean & Empty IP3251EUT",
+    slug: "shark-powerdetect-clean-ip3251eut",
+    category: "Aspirateurs",
+    excerpt: "L'aspirateur balai premium avec station auto-vide qui révolutionne le nettoyage. Idéal pour poils d'animaux et grandes surfaces.",
+    image: base + "images/products/shark.jpg",
+    rating: 4.7,
+    publishDate: "21 janvier 2026",
+    featured: true
+  }
+];
 
-const categories = [];
+const categories = [
+  {
+    name: "Aspirateurs",
+    slug: "aspirateurs",
+    icon: "device-vacuum",
+    count: 1
+  }
+];
 ---
 
 <Layout 
@@ -58,14 +77,36 @@ const categories = [];
     <div class="container">
       <div class="section-header">
         <div>
-          <p class="section-kicker">Bientôt disponible</p>
-          <h2 class="section-title"><Icon name="map-pin" class="icon-accent" /> Articles en cours de création</h2>
+          <p class="section-kicker">Nouveautés 2026</p>
+          <h2 class="section-title"><Icon name="star" class="icon-accent" /> Nos derniers tests produits</h2>
         </div>
       </div>
       
-      <div style="text-align: center; padding: 4rem 2rem; background: var(--color-surface); border-radius: 12px; margin-top: 2rem;">
-        <Icon name="clock" class="icon-accent" size={48} />
-        <p style="margin-top: 1rem; font-size: 1.125rem; color: var(--color-text-secondary);">Nos premiers tests et comparatifs seront bientôt disponibles. Revenez nous voir prochainement !</p>
+      <div class="articles-grid">
+        {featuredArticles.map(article => (
+          <article class="article-card">
+            <a href={base + article.slug} class="article-link">
+              <div class="article-image">
+                <img src={article.image} alt={article.title} />
+                <span class="article-category">{article.category}</span>
+              </div>
+              <div class="article-content">
+                <div class="article-rating">
+                  <Icon name="star" class="icon-accent" size={16} />
+                  <span>{article.rating}/5</span>
+                </div>
+                <h3 class="article-title">{article.title}</h3>
+                <p class="article-excerpt">{article.excerpt}</p>
+                <div class="article-meta">
+                  <time datetime={article.publishDate}>{article.publishDate}</time>
+                </div>
+                <div class="article-cta">
+                  <span class="read-more">Lire le test complet <Icon name="arrow-right" size={16} /></span>
+                </div>
+              </div>
+            </a>
+          </article>
+        ))}
       </div>
     </div>
   </section>
@@ -79,9 +120,21 @@ const categories = [];
         <div class="section-header">
           <div>
             <p class="section-kicker">Navigation rapide</p>
-            <h2 class="section-title"><Icon name="folders" class="icon-accent" /> Catégories à venir</h2>
-            <p class="section-subtitle">Les catégories seront disponibles dès la publication de nos premiers contenus.</p>
+            <h2 class="section-title"><Icon name="folders" class="icon-accent" /> Explorer par catégorie</h2>
+            <p class="section-subtitle">Trouvez rapidement les produits qui vous intéressent.</p>
           </div>
+        </div>
+        
+        <div class="categories-grid">
+          {categories.map(category => (
+            <a href={base + `categories/${category.slug}`} class="category-card">
+              <div class="category-icon">
+                <Icon name={category.icon} size={32} class="icon-accent" />
+              </div>
+              <h3 class="category-name">{category.name}</h3>
+              <span class="category-count">{category.count} article{category.count > 1 ? 's' : ''}</span>
+            </a>
+          ))}
         </div>
       </div>
     </div>
