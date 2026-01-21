@@ -11,6 +11,8 @@ import ComparisonCard from '../components/ComparisonCard.astro';
 import AffiliateButton from '../components/AffiliateButton.astro';
 import Icon from '../components/Icon.astro';
 
+const base = import.meta.env.BASE_URL;
+
 // ===== CONFIGURATION DU COMPARATIF =====
 const comparisonData = {
   // SEO
@@ -32,7 +34,7 @@ const comparisonData = {
 const products = [
   {
     name: "Produit Premium XYZ",
-    image: "/images/products/produit-xyz-main.jpg",
+    image: base + "images/products/produit-xyz-main.jpg",
     rating: 4.8,
     price: "299€",
     pros: [
@@ -49,7 +51,7 @@ const products = [
   },
   {
     name: "Produit Économique ABC",
-    image: "/images/products/produit-abc-main.jpg",
+    image: base + "images/products/produit-abc-main.jpg",
     rating: 4.3,
     price: "149€",
     pros: [
@@ -66,7 +68,7 @@ const products = [
   },
   {
     name: "Produit Haut de Gamme DEF",
-    image: "/images/products/produit-def-main.jpg",
+    image: base + "images/products/produit-def-main.jpg",
     rating: 4.9,
     price: "499€",
     pros: [
@@ -82,7 +84,7 @@ const products = [
   },
   {
     name: "Produit Milieu de Gamme GHI",
-    image: "/images/products/produit-ghi-main.jpg",
+    image: base + "images/products/produit-ghi-main.jpg",
     rating: 4.5,
     price: "249€",
     pros: [
@@ -98,7 +100,7 @@ const products = [
   },
   {
     name: "Produit Innovant JKL",
-    image: "/images/products/produit-jkl-main.jpg",
+    image: base + "images/products/produit-jkl-main.jpg",
     rating: 4.4,
     price: "329€",
     pros: [
@@ -147,8 +149,8 @@ const selectionCriteria = [
     <!-- Header -->
     <div class="page-header container">
       <div class="breadcrumb">
-        <a href="/">Accueil</a> » 
-        <a href="/comparatifs">Comparatifs</a> » 
+        <a href={base}>Accueil</a> » 
+        <a href={base + "comparatif-exemple"}>Comparatifs</a> » 
         <span>{comparisonData.category}</span>
       </div>
       

@@ -1,4 +1,6 @@
 ---
+import "../styles/global.css";
+
 interface Props {
   title: string;
   description: string;
@@ -7,13 +9,29 @@ interface Props {
 }
 
 const { title, description, image, canonicalUrl } = Astro.props;
-const siteTitle = "Blog Affiliation - Les Meilleurs Produits Testés";
+
+const siteTitle = 'Blog Affiliation - Les Meilleurs Produits Testes';
 const fullTitle = `${title} | ${siteTitle}`;
-const defaultImage = "/images/og-default.jpg";
-const ogImage = image || defaultImage;
+
 const base = import.meta.env.BASE_URL;
-import "../styles/global.css";
+const siteUrl = Astro.site?.href ?? 'https://sirenenouira.github.io/Blog-perso/';
+
+const defaultImage = `${base}images/og-default.jpg`;
+
+const stripLeadingSlash = (value: string) =>
+  value.startsWith('/') ? value.slice(1) : value;
+
+const ogImagePath = image || defaultImage;
+const ogImage = new URL(stripLeadingSlash(ogImagePath), siteUrl).toString();
+
+const canonicalTarget = canonicalUrl
+  ? stripLeadingSlash(canonicalUrl)
+  : stripLeadingSlash(base);
+
+const canonicalHref = new URL(canonicalTarget, siteUrl).toString();
+const faviconHref = `${base}favicon.svg`;
 ---
+
 
 <!DOCTYPE html>
 <html lang="fr">
@@ -24,7 +42,7 @@ import "../styles/global.css";
   <!-- SEO Meta Tags -->
   <title>{fullTitle}</title>
   <meta name="description" content={description}>
-  {canonicalUrl && <link rel="canonical" href={canonicalUrl}>}
+  <link rel="canonical" href={canonicalHref}>
   
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website">
@@ -39,7 +57,7 @@ import "../styles/global.css";
   <meta name="twitter:image" content={ogImage}>
   
   <!-- Favicon -->
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="icon" type="image/svg+xml" href={faviconHref}>
   
   <!-- Preconnect for performance -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -54,13 +72,13 @@ import "../styles/global.css";
         </a>
         <ul class="nav-menu">
           <li><a href={base}>Accueil</a></li>
-          <li><a href={`${base}article-produit-exemple`}>Articles</a></li>
-          <li><a href={`${base}comparatif-exemple`}>Comparatifs</a></li>
-          <li><a href={`${base}divulgation-affiliation`}>Affiliation</a></li>
+          <li><a href={base + "article-produit-exemple"}>Articles</a></li>
+          <li><a href={base + "comparatif-exemple"}>Comparatifs</a></li>
+          <li><a href={base + "divulgation-affiliation"}>Affiliation</a></li>
           <li><a href="mailto:contact@example.com">Contact</a></li>
         </ul>
         <button class="mobile-menu-toggle" aria-label="Menu">
-          ☰
+          Menu
         </button>
       </div>
     </nav>
@@ -74,24 +92,24 @@ import "../styles/global.css";
     <div class="container">
       <div class="footer-grid">
         <div class="footer-col">
-          <h3>À propos</h3>
-          <p>Nous testons et recommandons les meilleurs produits pour vous aider à faire les bons choix.</p>
+          <h3>A propos</h3>
+          <p>Nous testons et recommandons les meilleurs produits pour vous aider a faire les bons choix.</p>
         </div>
         <div class="footer-col">
           <h3>Navigation</h3>
           <ul>
-            <li><a href={`${base}articles`}>Tous les articles</a></li>
-            <li><a href={`${base}comparatif-exemple`}>Comparatifs</a></li>
-            <li><a href={`${base}categories`}>Catégories</a></li>
+            <li><a href={base + "articles"}>Tous les articles</a></li>
+            <li><a href={base + "comparatif-exemple"}>Comparatifs</a></li>
+            <li><a href={base + "categories"}>Categories</a></li>
             <li><a href="mailto:contact@example.com">Contact</a></li>
           </ul>
         </div>
         <div class="footer-col">
-          <h3>Légal</h3>
+          <h3>Legal</h3>
           <ul>
-            <li><a href={`${base}mentions-legales`}>Mentions légales</a></li>
-            <li><a href={`${base}politique-confidentialite`}>Confidentialité</a></li>
-            <li><a href={`${base}divulgation-affiliation`}>Divulgation affiliation</a></li>
+            <li><a href={base + "mentions-legales"}>Mentions legales</a></li>
+            <li><a href={base + "politique-confidentialite"}>Confidentialite</a></li>
+            <li><a href={base + "divulgation-affiliation"}>Divulgation affiliation</a></li>
           </ul>
         </div>
         <div class="footer-col">
@@ -104,9 +122,9 @@ import "../styles/global.css";
         </div>
       </div>
       <div class="footer-bottom">
-        <p>&copy; {new Date().getFullYear()} Blog Affiliation. Tous droits réservés.</p>
+        <p>&copy; {new Date().getFullYear()} Blog Affiliation. Tous droits reserves.</p>
         <p class="affiliate-disclosure">
-          Les liens de cette page peuvent être des liens d'affiliation. Nous touchons une commission sur les achats effectués via ces liens, sans frais supplémentaires pour vous.
+          Les liens de cette page peuvent etre des liens d'affiliation. Nous touchons une commission sur les achats effectues via ces liens, sans frais supplementaires pour vous.
         </p>
       </div>
     </div>

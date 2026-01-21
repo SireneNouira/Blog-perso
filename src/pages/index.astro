@@ -3,21 +3,23 @@ import Layout from '../layouts/Layout.astro';
 import AffiliateButton from '../components/AffiliateButton.astro';
 import Icon from '../components/Icon.astro';
 
+const base = import.meta.env.BASE_URL;
+
 const featuredArticles = [
   {
     title: "Test & Avis Produit Premium XYZ",
     excerpt: "Notre test complet du produit le plus populaire de 2026",
-    image: `${import.meta.env.BASE_URL}images/img.jpg`,
+    image: base + "images/img.jpg",
     category: "Électronique",
-    link: `${import.meta.env.BASE_URL}article-produit-exemple`,
+    link: base + "article-produit-exemple",
     rating: 4.8
   },
   {
     title: "Top 5 des Meilleurs Produits XYZ",
     excerpt: "Comparatif complet pour faire le bon choix",
-    image: `${import.meta.env.BASE_URL}images/img2.jpg`,
+    image: base + "images/img2.jpg",
     category: "Comparatifs",
-    link: `${import.meta.env.BASE_URL}comparatif-exemple`,
+    link: base + "comparatif-exemple",
     rating: 4.9
   }
 ];
@@ -56,14 +58,14 @@ const categories = [
         </div>
         <div class="hero-cta">
           <AffiliateButton 
-            href="/articles"
+            href={base + "articles"}
             text="Découvrir nos articles"
             variant="accent"
             size="large"
             external={false}
           />
           <AffiliateButton 
-            href="/comparatifs"
+            href={base + "comparatifs"}
             text="Voir les comparatifs"
             variant="secondary"
             size="large"
@@ -83,7 +85,7 @@ const categories = [
           <p class="section-kicker">À lire maintenant</p>
           <h2 class="section-title"><Icon name="map-pin" class="icon-accent" /> Articles en vedette</h2>
         </div>
-        <a href="/articles" class="btn btn-ghost btn-sm" aria-label="Voir tous les articles">Tout voir</a>
+        <a href={base + "articles"} class="btn btn-ghost btn-sm" aria-label="Voir tous les articles">Tout voir</a>
       </div>
       
       <div class="articles-grid">
@@ -134,7 +136,7 @@ const categories = [
         <div class="categories-grid">
           {categories.map(category => (
             <a
-              href={`/categories/${category.name.toLowerCase().replace(/ & /g, '-').replace(/ /g, '-')}`}
+              href={`${base}categories/${category.name.toLowerCase().replace(/ & /g, '-').replace(/ /g, '-')}`}
               class="category-card"
               style={`--category-color: ${category.color}`}
             >
@@ -188,14 +190,14 @@ const categories = [
           </ul>
           <div class="cta-buttons">
             <AffiliateButton 
-              href="/articles"
+              href={base + "articles"}
               text="Explorer tous les articles"
               variant="accent"
               size="large"
               external={false}
             />
             <AffiliateButton 
-              href="/comparatifs"
+              href={base + "comparatifs"}
               text="Voir les comparatifs"
               variant="secondary"
               size="large"
