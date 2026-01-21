@@ -11,6 +11,7 @@ const siteTitle = "Blog Affiliation - Les Meilleurs Produits Testés";
 const fullTitle = `${title} | ${siteTitle}`;
 const defaultImage = "/images/og-default.jpg";
 const ogImage = image || defaultImage;
+const base = import.meta.env.BASE_URL;
 import "../styles/global.css";
 ---
 
@@ -48,14 +49,14 @@ import "../styles/global.css";
   <header class="site-header">
     <nav class="container">
       <div class="nav-wrapper">
-        <a href="/" class="logo">
+        <a href={base} class="logo">
           <span class="logo-text">Blog Affiliation</span>
         </a>
         <ul class="nav-menu">
-          <li><a href="/">Accueil</a></li>
-          <li><a href="/article-produit-exemple">Articles</a></li>
-          <li><a href="/comparatif-exemple">Comparatifs</a></li>
-          <li><a href="/divulgation-affiliation">Affiliation</a></li>
+          <li><a href={base}>Accueil</a></li>
+          <li><a href={`${base}article-produit-exemple`}>Articles</a></li>
+          <li><a href={`${base}comparatif-exemple`}>Comparatifs</a></li>
+          <li><a href={`${base}divulgation-affiliation`}>Affiliation</a></li>
           <li><a href="mailto:contact@example.com">Contact</a></li>
         </ul>
         <button class="mobile-menu-toggle" aria-label="Menu">
@@ -79,18 +80,18 @@ import "../styles/global.css";
         <div class="footer-col">
           <h3>Navigation</h3>
           <ul>
-            <li><a href="/articles">Tous les articles</a></li>
-            <li><a href="/comparatifs">Comparatifs</a></li>
-            <li><a href="/categories">Catégories</a></li>
-            <li><a href="/contact">Contact</a></li>
+            <li><a href={`${base}articles`}>Tous les articles</a></li>
+            <li><a href={`${base}comparatif-exemple`}>Comparatifs</a></li>
+            <li><a href={`${base}categories`}>Catégories</a></li>
+            <li><a href="mailto:contact@example.com">Contact</a></li>
           </ul>
         </div>
         <div class="footer-col">
           <h3>Légal</h3>
           <ul>
-            <li><a href="/mentions-legales">Mentions légales</a></li>
-            <li><a href="/politique-confidentialite">Confidentialité</a></li>
-            <li><a href="/divulgation-affiliation">Divulgation affiliation</a></li>
+            <li><a href={`${base}mentions-legales`}>Mentions légales</a></li>
+            <li><a href={`${base}politique-confidentialite`}>Confidentialité</a></li>
+            <li><a href={`${base}divulgation-affiliation`}>Divulgation affiliation</a></li>
           </ul>
         </div>
         <div class="footer-col">
